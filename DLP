@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Compte à rebours - DLP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #000;
+      font-family: monospace;
+      overflow: hidden;
+    }
+
+    /* DLP flottant avec éclairs */
+    .background-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Honk', sans-serif;
+      font-size: 20vw;
+      color: #fff;
+      opacity: 0.12;
+      white-space: nowrap;
+      z-index: 1;
+      animation: floatText 8s ease-in-out infinite alternate,
+                 lightningFlash 4s infinite;
+      text-shadow:
+        0 0 10px #fff,
+        0 0 30px #0ff,
+        0 0 50px #0ff;
+      pointer-events: none;
+    }
+
+    /* Compte à rebours */
+    .countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 3vw;
+      z-index: 2;
+    }
+
+    .countdown-item {
+      text-align: center;
+      color: #fff;
+      font-family: monospace;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px #fff;
+    }
+
+    .countdown-item .value {
+      font-size: 5vw;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .countdown-item .label {
+      font-size: 1.2vw;
+      opacity: 0.6;
+      text-transform: uppercase;
+      margin-top: 0.2em;
+      letter-spacing: 0.15em;
+    }
+
+    /* Animation flottement */
+    @keyframes floatText {
+      0%   { transform: translate(-50%, -50%) translateY(0); }
+      50%  { transform: translate(-50%, -50%) translateY(-20px); }
+      100% { transform: translate(-50%, -50%) translateY(0); }
+    }
+
+    /* Animation éclairs pour DLP */
+    @keyframes lightningFlash {
+      0%, 10%, 100% {
+        text-shadow:
+          0 0 10px #fff,
+          0 0 30px #0ff,
+          0 0 50px #0ff;
+        opacity: 0.12;
+      }
+      5%, 70% {
+        text-shadow:
+          0 0 20px #fff,
+          0 0 50px #0ff,
+          0 0 80px #0ff,
+          0 0 120px #0ff;
+        opacity: 0.22;
+      }
+      75% {
+        text-shadow:
+          0 0 50px #fff,
+          0 0 100px #0ff,
+          0 0 150px #0ff;
+        opacity: 0.3;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background-text">DLP</div>
+
+  <div class="countdown" id="countdown"></div>
+
+  <script>
+    const countdown = document.getElementById('countdown');
+    const targetDate = new Date('2025-06-29T23:59:00');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      const seconds = Math.max(0, Math.floor((diff / 1000) % 60));
+      const minutes = Math.max(0, Math.floor((diff / 1000 / 60) % 60));
+      const hours = Math.max(0, Math.floor((diff / (1000 * 60 * 60)) % 24));
+      const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+
+      countdown.innerHTML = `
+        <div class="countdown-item">
+          <div class="value">${String(days).padStart(2, '0')}</div>
+          <div class="label">j</div>
+        </div>
+        <div class="countdown-item">
+          <div class="value">${String(hours).padStart(2, '0')}</div>
+          <div class="label">h</div>
+        </div>
+        <div class="countdown-item">
+          <div class="value">${String(minutes).padStart(2, '0')}</div>
+          <div class="label">m</div>
+        </div>
+        <div class="countdown-item">
+          <div class="value">${String(seconds).padStart(2, '0')}</div>
+          <div class="label">s</div>
+        </div>
+      `;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>
