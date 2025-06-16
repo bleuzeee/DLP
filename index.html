@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Compte à rebours - DLP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #000;
+      font-family: monospace;
+      overflow: hidden;
+    }
+
+    .background-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Honk', sans-serif;
+      font-size: 20vw;
+      color: #fff;
+      opacity: 0.07;
+      white-space: nowrap;
+      z-index: 1;
+      text-shadow:
+        0 0 10px #fff,
+        0 0 30px #fff,
+        0 0 60px #fff;
+      filter: blur(0.8px);
+      animation: smoothPulse 5s ease-in-out infinite, smokeWobble 10s ease-in-out infinite;
+    }
+
+    @keyframes smoothPulse {
+      0% {
+        opacity: 0.07;
+        text-shadow:
+          0 0 10px #fff,
+          0 0 20px #ccc,
+          0 0 30px #bbb;
+      }
+      50% {
+        opacity: 0.12;
+        text-shadow:
+          0 0 20px #fff,
+          0 0 40px #eee,
+          0 0 70px #ccc;
+      }
+      100% {
+        opacity: 0.07;
+        text-shadow:
+          0 0 10px #fff,
+          0 0 20px #ccc,
+          0 0 30px #bbb;
+      }
+    }
+
+    @keyframes smokeWobble {
+      0%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+      50% { transform: translate(-50%, -50%) rotate(0.3deg) scale(1.01); }
+    }
+
+    .countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 4vw;
+      z-index: 2;
+    }
+
+    .countdown-item {
+      text-align: center;
+      color: #fff;
+      font-family: monospace;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #aaa,
+        0 0 20px #666;
+    }
+
+    .countdown-item .value {
+      font-size: 5vw;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .countdown-item .label {
+      font-size: 1.2vw;
+      opacity: 0.6;
+      text-transform: uppercase;
+      margin-top: 0.2em;
+      letter-spacing: 0.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background-text">DLP</div>
+  <div class="countdown" id="countdown"></div>
+
+  <script>
+    const countdown = document.getElementById('countdown');
+    const targetDate = new Date('2025-06-29T23:59:00');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        countdown.innerHTML = `
+          <div class="countdown-item"><div class="value">00</div><div class="label">j</div></div>
+          <div class="countdown-item"><div class="value">00</div><div class="label">h</div></div>
+          <div class="countdown-item"><div class="value">00</div><div class="label">m</div></div>
+          <div class="countdown-item"><div class="value">00</div><div class="label">s</div></div>
+        `;
+        return;
+      }
+
+      const seconds = Math.floor((diff / 1000) % 60);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      countdown.innerHTML = `
+        <div class="countdown-item">
+          <div class="value">${String(days).padStart(2, '0')}</div>
+          <div class="label">j</div>
+        </div>
+        <div class="countdown-item">
+          <div class="value">${String(hours).padStart(2, '0')}</div>
+          <div class="label">h</div>
+        </div>
+        <div class="countdown-item">
+          <div class="value">${String(minutes).padStart(2, '0')}</div>
+          <div class="label">m</div>
+        </div>
+        <div class="countdown-item">
+          <div class="value">${String(seconds).padStart(2, '0')}</div>
+          <div class="label">s</div>
+        </div>
+      `;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>
